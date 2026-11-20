@@ -19,6 +19,10 @@ namespace Nuevo_Young_FinalProject2
         private Dictionary<char, LetterState> letterStates;
         private Label feedbackLabel;
         private Button newGameButton;
+        private Leaderboard leaderboard = new Leaderboard();
+        private System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+        private TextBox nameTextBox;
+        private ListBox leaderboardListBox;
 
         public Form1()
         {
@@ -41,11 +45,14 @@ namespace Nuevo_Young_FinalProject2
             BuildFeedbackLabel();
             BuildNewGameButton();
             ArrangeGameLayout();
+            BuildLeaderboardUI();
+            RefreshLeaderboard();
             StartNewGame();
         }
 
         // When running the form, populate the XML Doc with words from the txt file (only if XML Doc is empty).
-        // Words from the txt file were copy pasted from https://eslforums.com/5-letter-words/.
+        // Words from the txt file were copy pasted from https://eslforums.com/5-letter-words/ and
+        // https://github.com/darkermango/5-Letter-words/blob/main/words.txt
         private void BuildWordsXml()
         {
             string rawTextPath = "rawWords.txt";
@@ -61,7 +68,7 @@ namespace Nuevo_Young_FinalProject2
             }
 
             string[] rawWords = File.ReadAllText(rawTextPath)
-                .Split(new[] { ' ', '\r', '\n', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                .Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
 
             foreach (string word in rawWords)
             {
@@ -79,10 +86,12 @@ namespace Nuevo_Young_FinalProject2
 
         private void StartNewGame()
         {
+            RefreshLeaderboard();
             string secretWord = wordList.GetRandomWord();
             game = new WordleApp(secretWord);
             currentColumn = 0;
             feedbackLabel.Text = "";
+            stopwatch.Reset();
 
             // Clear all 30 labels
             for (int row = 0; row < 6; row++)
@@ -106,6 +115,10 @@ namespace Nuevo_Young_FinalProject2
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
+            // So player can type name without affecting the grid
+            if (nameTextBox.Focused)
+                return;
+
             if (game.isGameOver)
                 return;
 
@@ -152,6 +165,11 @@ namespace Nuevo_Young_FinalProject2
                 return;
             }
 
+            if (!stopwatch.IsRunning)
+            {
+                stopwatch.Start();
+            }
+
             int rowToColor = game.currentRow;
             LetterState[] results = game.EvaluateGuess(guess);
             UpdateKeyboardColors(guess, results);
@@ -177,6 +195,8 @@ namespace Nuevo_Young_FinalProject2
 
             if (game.hasWon)
             {
+                stopwatch.Stop();
+                leaderboard.AddEntry(nameTextBox.Text, stopwatch.Elapsed.TotalSeconds);
                 ShowFeedback("You win!");
             }
             else if (game.isGameOver)
@@ -253,7 +273,10 @@ namespace Nuevo_Young_FinalProject2
             enterButton.Size = new Size(55, buttonHeight);
             enterButton.Location = new Point(0, 84);
             enterButton.Font = new Font("Arial", 8, FontStyle.Bold);
-            enterButton.Click += (s, e) => SubmitGuess();
+            enterButton.Click += (s, e) => { 
+                SubmitGuess(); 
+                this.ActiveControl = null; 
+            };
             enterButton.TabStop = false;
 
             // Backspace button
@@ -262,7 +285,10 @@ namespace Nuevo_Young_FinalProject2
             backButton.Size = new Size(55, buttonHeight);
             backButton.Location = new Point(315, 84);
             backButton.Font = new Font("Arial", 8, FontStyle.Bold);
-            backButton.Click += (s, e) => DeleteLetter();
+            backButton.Click += (s, e) => {
+                SubmitGuess();
+                this.ActiveControl = null;
+            };
             backButton.TabStop = false;
 
             keyboardPanel.Controls.Add(enterButton);
@@ -275,6 +301,7 @@ namespace Nuevo_Young_FinalProject2
             Button clickedButton = sender as Button;
             char letter = (char)clickedButton.Tag;
             AddLetter(letter);
+            this.ActiveControl = null;
         }
 
         private void AddLetter(char letter)
@@ -309,7 +336,7 @@ namespace Nuevo_Young_FinalProject2
 
                 LetterState oldState = letterStates[letter];
 
-                // Green has the highest priorit -> Yellow -> Gray
+                // Green has the highest priority -> Yellow -> Gray
                 if (newState == LetterState.Green ||
                     (newState == LetterState.Yellow &&
                      oldState != LetterState.Green) ||
@@ -438,11 +465,68 @@ namespace Nuevo_Young_FinalProject2
             newGameButton.UseVisualStyleBackColor = false;
             newGameButton.Cursor = Cursors.Hand;
 
-            newGameButton.Click += (s, e) => StartNewGame();
+            newGameButton.Click += (s, e) =>
+            {
+                StartNewGame();
+                this.ActiveControl = null;
+            };
 
             this.Controls.Add(newGameButton);
             newGameButton.BringToFront();
             newGameButton.TabStop = false;
         }
+
+            // Add a name textbox and leaderboard list to the right of the game.
+            private void BuildLeaderboardUI()
+            {
+                int x = ClientSize.Width + 10;
+
+                ClientSize = new Size(ClientSize.Width + 210, ClientSize.Height);
+
+                Label nameLabel = new Label();
+                nameLabel.Text = "Name:";
+                nameLabel.AutoSize = true;
+                nameLabel.Location = new Point(x, 10);
+
+                nameTextBox = new TextBox();
+                nameTextBox.Location = new Point(x, 32);
+                nameTextBox.Width = 180;
+                nameTextBox.MaxLength = 15;
+                nameTextBox.TabStop = false;
+
+                // Pressing Enter in the textbox gives control back to the game.
+                nameTextBox.KeyDown += (s, e) =>
+                {
+                    if (e.KeyCode == Keys.Enter)
+                    {
+                        this.ActiveControl = null;
+                        e.Handled = true;
+                        e.SuppressKeyPress = true;
+                    }
+                };
+
+                Label boardLabel = new Label();
+                boardLabel.Text = "Leaderboard";
+                boardLabel.AutoSize = true;
+                boardLabel.Font = new Font("Arial", 10, FontStyle.Bold);
+                boardLabel.Location = new Point(x, 70);
+
+                leaderboardListBox = new ListBox();
+                leaderboardListBox.Location = new Point(x, 92);
+                leaderboardListBox.Size = new Size(180, 200);
+                leaderboardListBox.TabStop = false;
+
+                this.Controls.Add(nameLabel);
+                this.Controls.Add(nameTextBox);
+                this.Controls.Add(boardLabel);
+                this.Controls.Add(leaderboardListBox);
+            }
+
+            // Reload the top 10 fastest solves from Leaderboard.xml into the list.
+            private void RefreshLeaderboard()
+            {
+                leaderboardListBox.Items.Clear();
+                leaderboardListBox.Items.AddRange(leaderboard.GetTopScores(10).ToArray());
+            }
     }
 }

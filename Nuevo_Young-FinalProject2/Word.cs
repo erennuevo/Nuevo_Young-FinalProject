@@ -37,10 +37,9 @@ namespace Nuevo_Young_FinalProject2
                     {
                         string word = child.InnerText.Trim().ToUpper();
 
-                        if (word.Length == 5 && word.All(char.IsLetter))
+                        if (validWords.Add(word))
                         {
                             words.Add(word);
-                            validWords.Add(word);
                         }
                     }
                 }

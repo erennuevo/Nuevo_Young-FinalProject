@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{49C99067-0406-47F4-85B1-8235BC5D0238}</ProjectGuid>
+    <ProjectGuid>{E761948C-8AC8-845A-9DBC-308ED18A8DB2}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>Nuevo_Young_FinalProject2</RootNamespace>
     <AssemblyName>Nuevo_Young-FinalProject2</AssemblyName>
@@ -54,6 +54,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Leaderboard.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Word.cs" />
