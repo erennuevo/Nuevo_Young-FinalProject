@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml;
 
 namespace Nuevo_Young_FinalProject2
@@ -10,6 +11,8 @@ namespace Nuevo_Young_FinalProject2
         private XmlElement rootNode;
         private string wordsPath = "Words.xml";
         private List<string> words;
+        private static Random rand = new Random();
+        private HashSet<string> validWords;
 
         public Word()
         {
@@ -26,10 +29,20 @@ namespace Nuevo_Young_FinalProject2
             {
                 words = new List<string>();
                 XmlNodeList rootChildren = rootNode.ChildNodes;
+                validWords = new HashSet<string>();
 
                 foreach (XmlNode child in rootChildren)
                 {
-                    words.Add(child.InnerText);
+                    if (child is XmlElement && child.Name == "Word")
+                    {
+                        string word = child.InnerText.Trim().ToUpper();
+
+                        if (word.Length == 5 && word.All(char.IsLetter))
+                        {
+                            words.Add(word);
+                            validWords.Add(word);
+                        }
+                    }
                 }
             }
         }
@@ -37,19 +50,21 @@ namespace Nuevo_Young_FinalProject2
         // Get a random word to guess from the word list.
         public string GetRandomWord()
         {
-            Random rand = new Random();
+            if (words.Count == 0)
+                throw new InvalidOperationException("No valid words found.");
+
             return words[rand.Next(words.Count)];
         }
 
         // Check if a user's guess is a valid word.
         public bool IsValidWord(string guess)
         {
-            XmlNode validWord = rootNode.SelectSingleNode($"Word[text()='{guess.ToUpper()}']");
-            if (validWord != null)
-            {
-                return true;
-            }
-            return false;
+            guess = guess.Trim().ToUpper();
+
+            if (guess.Length != 5 || !guess.All(char.IsLetter))
+                return false;
+
+            return validWords.Contains(guess);
         }
     }
 }

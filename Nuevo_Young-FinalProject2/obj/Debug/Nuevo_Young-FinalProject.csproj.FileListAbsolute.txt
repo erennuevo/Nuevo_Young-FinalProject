@@ -8,3 +8,13 @@ C:\Users\liber\source\repos\Nuevo_Young-FinalProject2\Nuevo_Young-FinalProject2\
 C:\Users\liber\source\repos\Nuevo_Young-FinalProject2\Nuevo_Young-FinalProject2\obj\Debug\Nuevo_Young-FinalProject.csproj.CoreCompileInputs.cache
 C:\Users\liber\source\repos\Nuevo_Young-FinalProject2\Nuevo_Young-FinalProject2\obj\Debug\Nuevo_Young-FinalProject2.exe
 C:\Users\liber\source\repos\Nuevo_Young-FinalProject2\Nuevo_Young-FinalProject2\obj\Debug\Nuevo_Young-FinalProject2.pdb
+C:\Users\LENOVO\source\repos\Nuevo_Young-FinalProject\Nuevo_Young-FinalProject2\bin\Debug\Nuevo_Young-FinalProject2.exe.config
+C:\Users\LENOVO\source\repos\Nuevo_Young-FinalProject\Nuevo_Young-FinalProject2\bin\Debug\Nuevo_Young-FinalProject2.exe
+C:\Users\LENOVO\source\repos\Nuevo_Young-FinalProject\Nuevo_Young-FinalProject2\bin\Debug\Nuevo_Young-FinalProject2.pdb
+C:\Users\LENOVO\source\repos\Nuevo_Young-FinalProject\Nuevo_Young-FinalProject2\obj\Debug\Nuevo_Young-FinalProject.csproj.AssemblyReference.cache
+C:\Users\LENOVO\source\repos\Nuevo_Young-FinalProject\Nuevo_Young-FinalProject2\obj\Debug\Nuevo_Young_FinalProject2.Form1.resources
+C:\Users\LENOVO\source\repos\Nuevo_Young-FinalProject\Nuevo_Young-FinalProject2\obj\Debug\Nuevo_Young_FinalProject2.Properties.Resources.resources
+C:\Users\LENOVO\source\repos\Nuevo_Young-FinalProject\Nuevo_Young-FinalProject2\obj\Debug\Nuevo_Young-FinalProject.csproj.GenerateResource.cache
+C:\Users\LENOVO\source\repos\Nuevo_Young-FinalProject\Nuevo_Young-FinalProject2\obj\Debug\Nuevo_Young-FinalProject.csproj.CoreCompileInputs.cache
+C:\Users\LENOVO\source\repos\Nuevo_Young-FinalProject\Nuevo_Young-FinalProject2\obj\Debug\Nuevo_Young-FinalProject2.exe
+C:\Users\LENOVO\source\repos\Nuevo_Young-FinalProject\Nuevo_Young-FinalProject2\obj\Debug\Nuevo_Young-FinalProject2.pdb
